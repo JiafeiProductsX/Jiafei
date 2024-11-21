@@ -1,0 +1,75 @@
+local UILibrary = {}
+
+function UILibrary:NewWindow(title)
+    local window = {}
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 300, 0, 400)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    frame.Parent = screenGui
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Text = title
+    titleLabel.Size = UDim2.new(1, 0, 0, 30)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 20
+    titleLabel.Parent = frame
+
+    window.Frame = frame
+
+    function window:NewSection(sectionTitle)
+        local section = {}
+        local sectionLabel = Instance.new("TextLabel")
+        sectionLabel.Text = sectionTitle
+        sectionLabel.Size = UDim2.new(1, 0, 0, 25)
+        sectionLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        sectionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        sectionLabel.Font = Enum.Font.SourceSansBold
+        sectionLabel.TextSize = 18
+        sectionLabel.Parent = frame
+
+        function section:CreateButton(buttonText, callback)
+            local button = Instance.new("TextButton")
+            button.Text = buttonText
+            button.Size = UDim2.new(1, -20, 0, 30)
+            button.Position = UDim2.new(0, 10, 0, sectionLabel.Position.Y.Offset + 30)
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.Font = Enum.Font.SourceSans
+            button.TextSize = 18
+            button.Parent = frame
+            button.MouseButton1Click:Connect(callback)
+        end
+
+        function section:CreateTextbox(placeholderText, callback)
+            local textBox = Instance.new("TextBox")
+            textBox.PlaceholderText = placeholderText
+            textBox.Size = UDim2.new(1, -20, 0, 30)
+            textBox.Position = UDim2.new(0, 10, 0, sectionLabel.Position.Y.Offset + 70)
+            textBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            textBox.Font = Enum.Font.SourceSans
+            textBox.TextSize = 18
+            textBox.Parent = frame
+            textBox.FocusLost:Connect(function(enterPressed)
+                if enterPressed then
+                    callback(textBox.Text)
+                end
+            end)
+        end
+
+        -- You can add similar functions for toggles, sliders, dropdowns, and color pickers
+        -- Extend as needed!
+
+        return section
+    end
+
+    return window
+end
+
+return UILibrary
